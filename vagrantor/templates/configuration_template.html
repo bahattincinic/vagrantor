@@ -1,0 +1,34 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.vm.box = "{{ box_name }}"
+
+  {% for port in forwarded_ports %}
+  config.vm.network :forwarded_port, guest: {{ port.quest }}, host: {{ port.host }}
+  {% endfor %}
+
+  {% if private_ip %}
+  config.vm.network :private_network, ip: "{{ private_ip }}"
+  {% endif %}
+
+  {% if public_network %}
+  config.vm.network :public_network, ip: "{{ public_network }}"
+  {% endif %}
+
+  {% if memory or cpu %}
+  config.vm.provider :virtualbox do |vb|
+    {% if memory %}
+    v.memory = {{ memory }}
+    {% endif %}
+
+    {% if cpu %}
+    v.cpus = {{ cpu }}
+    {% endif %}
+  end
+  {% endif %}
+
+end
