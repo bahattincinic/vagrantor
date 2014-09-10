@@ -14,10 +14,6 @@ setup(
             'vagrantor = vagrantor.__main__:main',
         ],
     },
-    dependency_links=[
-        # Pypi package version old
-        'https://github.com/kennethreitz/clint.git'
-    ],
     install_requires=[
         'jinja2',
         'clint'
