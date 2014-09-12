@@ -14,6 +14,9 @@ setup(
             'vagrantor = vagrantor.__main__:main',
         ],
     },
+    dependency_links=[
+        'http://github.com/kennethreitz/clint/tarball/master#egg=clint'
+    ],
     install_requires=[
         'jinja2',
         'clint'

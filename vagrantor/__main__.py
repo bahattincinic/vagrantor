@@ -4,55 +4,15 @@ import sys
 import subprocess
 from clint.textui import colored, puts, prompt
 from jinja2 import Template
-from clint.textui.validators import (ValidationError, RegexValidator,
-                                     IntegerValidator)
-
-
-class BoxNameValidator(object):
-    message = 'Enter a valid box name'
-
-    def __init__(self, message=None):
-        if message is not None:
-            self.message = message
-
-    def __call__(self, value):
-        """
-        Validates that the input is a box names.
-        """
-        query = subprocess.Popen(['vagrant', 'box', 'list'],
-                                 stdout=subprocess.PIPE)
-        response, error = query.communicate()
-        box_list = [r.split(' ')[0] for r in response.split('\n')]
-        if value not in box_list:
-            raise ValidationError(self.message)
-        return value
-
-
-class VagrantFileValidator(object):
-    message = 'VagrantFile already exists'
-
-    def __init__(self, message=None):
-        if message is not None:
-            self.message = message
-
-    def __call__(self, value):
-        """
-        Validates that the input is a valid file.
-        """
-        if not os.path.isdir(value):
-            raise ValidationError('Enter a valid file.')
-        file_path = os.path.join(value, 'VagrantFile')
-        if os.path.isfile(file_path):
-            raise ValidationError(self.message)
-        return value
+from clint.textui.validators import RegexValidator, IntegerValidator
+from vagrantor.validators import (BoxNameValidator, IpAddressValidator,
+                                  VagrantFileValidator)
 
 
 class VagrantFileGenerator(object):
     # template default content
     content = {'box_name': '', 'forwarded_ports': [], 'private_ip': '',
                'public_network': '', 'memory': '', 'cpu': ''}
-    # public and private network regex
-    ip_regex = r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$"
     # VagrantFile path
     path = ''
 
@@ -119,7 +79,7 @@ class VagrantFileGenerator(object):
         if prompt.yn('Create a private network ?', default='y'):
             self.content['private_ip'] = prompt.query(
                 'Private Ip Address: ',
-                validators=[RegexValidator(self.ip_regex)])
+                validators=[IpAddressValidator()])
 
     def get_public_network(self):
         """
@@ -134,7 +94,7 @@ class VagrantFileGenerator(object):
         if prompt.yn('Create a Public network(Static ip) ?', default='y'):
             self.content['public_network'] = prompt.query(
                 'Public Ip Address: ',
-                validators=[RegexValidator(self.ip_regex)])
+                validators=[IpAddressValidator()])
 
     def get_memory(self):
         """

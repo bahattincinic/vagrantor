@@ -5,4 +5,10 @@
 
 Vagrant configuration file generator
 
+Installation
+-------------
+pip install -e git+git@github.com:bahattincinic/vagrantor.git#egg=vagrantor
+
+Screenshots
+-------------
 ![alt text](https://cloud.githubusercontent.com/assets/1684999/4192875/60e99eda-379c-11e4-8531-4ed4c277ef21.png)
