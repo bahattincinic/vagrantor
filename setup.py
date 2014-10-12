@@ -1,9 +1,11 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name='vagrantor',
-    version='0.1',
-    packages=['vagrantor'],
+    version='0.3',
+    packages=find_packages(),
+    package_data={'vagrantor': ['templates/*.html']},
+    include_package_data=True,
     url='https://github.com/bahattincinic/vagrantor',
     license='MIT',
     author='Bahattin Cinic',
@@ -14,9 +16,6 @@ setup(
             'vagrantor = vagrantor.__main__:main',
         ],
     },
-    dependency_links=[
-        'http://github.com/kennethreitz/clint/tarball/master#egg=clint'
-    ],
     install_requires=[
         'jinja2',
         'clint'
